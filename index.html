@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árbol Binario de Expresión</title>
+    <link href="main.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000000;
+            font-family: Arial, sans-serif;
+        }
+
+        @keyframes rgbBorder {
+            0% {
+                border-color: rgba(255, 0, 0, 1);
+            }
+            50% {
+                border-color: rgba(0, 255, 34, 1);
+            }
+            100% {
+                border-color: rgba(0, 120, 255, 1);
+            }
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            padding: 30px;
+            border-radius: 20px;
+            background-color: #1c1c1c; /* Tarjeta oscura para combinar mejor */
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            color: #fff; /* Texto blanco para mayor contraste */
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            border: 4px solid;
+            box-sizing: border-box;
+            border-color: rgba(255, 0, 0, 1);
+            animation: rgbBorder 3s infinite alternate;
+            z-index: -1;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00e5ff; /* Azul brillante para destacar el título */
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .form-label {
+            font-size: 1rem;
+            color: #ffffff; /* Texto claro */
+        }
+
+        .btn {
+            background-color: #ff5722;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #e64a19;
+            transform: translateY(-3px);
+        }
+
+        .node {
+            background-color: #00e5ff; /* Color de nodo similar al título */
+            color: #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px auto;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 229, 255, 0.3);
+        }
+
+        .branch {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #treeContainer {
+            margin-top: 30px;
+        }
+
+        input:focus {
+            border-color: #ff5722;
+            box-shadow: 0 0 5px rgba(255, 87, 34, 0.5);
+        }
+
+        .form-control {
+            background-color: #333; /* Fondo oscuro para los inputs */
+            color: #fff; /* Texto blanco */
+            border-radius: 10px;
+            border: 2px solid #00e5ff; /* Borde que combina con los colores del diseño */
+        }
+    </style>
+</head>
+<body class="text-center">
+    <div class="card-container">
+        <div class="card" style="width: 24rem;">
+            <h1>Árbol Binario</h1>
+            <div class="mb-3">
+                <label for="expression" class="form-label">Introduce una expresión matemática:</label>
+                <input type="text" id="expression" class="form-control" placeholder="Ejemplo: (9 - (5+2)) * 3">
+            </div>
+            <button class="btn" onclick="generarArbol()">Generar Árbol</button>
+            <div id="treeContainer" class="mt-5"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="app2.js"></script>
+    <script src="app3.js"></script>
+</body>
+</html>
