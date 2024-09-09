@@ -1,3 +1,4 @@
+//coreccion del app
 const Nodo = (valor) => ({
     valor,
     izquierda: null,
