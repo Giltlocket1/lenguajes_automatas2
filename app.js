@@ -1,4 +1,3 @@
-//coreccion del app
 const Nodo = (valor) => ({
     valor,
     izquierda: null,
@@ -8,21 +7,57 @@ const Nodo = (valor) => ({
 const generarArbol = () => {
     const expresion = document.getElementById('expression').value;
 
-    // Validar que no haya números negativos que no sean parte de la expresión
-    if (expresion.match(/-[\d()]/) && !expresion.match(/^[\d()]+[-+*/][\d()]+$/)) {
-        alert('No se permiten números negativos en la expresión.');
-        return;
-    }
-
     try {
-        const arbol = construirArbol(expresion);
+        const expresionModificada = agregarMultiplicacionImplicita(expresion);
+        const arbol = construirArbol(expresionModificada);
         const contenedorArbol = document.getElementById('treeContainer');
         contenedorArbol.innerHTML = ''; // Limpiar cualquier contenido previo
         renderizarArbol(arbol, contenedorArbol);
+
+        // Mostrar los recorridos preorden, inorden y postorden
+        document.getElementById('preorden').textContent = recorrerPreorden(arbol).join(' ');
+        document.getElementById('inorden').textContent = recorrerInorden(arbol).join(' ');
+        document.getElementById('postorden').textContent = recorrerPostorden(arbol).join(' ');
+
     } catch (e) {
         alert('Expresión inválida. Por favor, introduce una expresión matemática correcta.');
         console.error(e);
     }
+};
+
+// Función para recorrer el árbol en preorden (raíz, izquierda, derecha)
+const recorrerPreorden = (nodo) => {
+    if (nodo === null) return [];
+    return [nodo.valor].concat(recorrerPreorden(nodo.izquierda), recorrerPreorden(nodo.derecha));
+};
+
+// Función para recorrer el árbol en inorden (izquierda, raíz, derecha)
+const recorrerInorden = (nodo) => {
+    if (nodo === null) return [];
+    return recorrerInorden(nodo.izquierda).concat([nodo.valor], recorrerInorden(nodo.derecha));
+};
+
+// Función para recorrer el árbol en postorden (izquierda, derecha, raíz)
+const recorrerPostorden = (nodo) => {
+    if (nodo === null) return [];
+    return recorrerPostorden(nodo.izquierda).concat(recorrerPostorden(nodo.derecha), [nodo.valor]);
+};
+
+// Función para agregar operadores de multiplicación implícitos cuando sea necesario
+const agregarMultiplicacionImplicita = (expresion) => {
+    let nuevaExpresion = '';
+    expresion.split('').map((charActual, i) => {
+        const charSiguiente = expresion[i + 1];
+
+        nuevaExpresion += charActual;
+
+        if ((/\d/.test(charActual) && charSiguiente === '(') || 
+            (charActual === ')' && (charSiguiente === '(' || /\d/.test(charSiguiente)))) {
+            nuevaExpresion += '*';
+        }
+    });
+
+    return nuevaExpresion;
 };
 
 // Función para construir el árbol de expresiones
@@ -52,9 +87,7 @@ const tokenizar = (expresion) => {
     let numero = '';
     let nivelParentesis = 0;
 
-    for (let i = 0; i < expresion.length; i++) {
-        const char = expresion[i];
-
+    expresion.split('').map((char, i) => {
         if (char === '(') {
             if (nivelParentesis > 0) {
                 numero += char;
@@ -79,7 +112,7 @@ const tokenizar = (expresion) => {
             }
             tokens.push(char);
         }
-    }
+    });
 
     if (numero) {
         tokens.push(numero);
@@ -95,7 +128,7 @@ const encontrarOperadorPrincipal = (tokens) => {
     let minimaPrecedencia = Infinity;
     let indice = -1;
 
-    tokens.forEach((token, i) => {
+    tokens.map((token, i) => {
         if (token === '(') {
             nivel++;
         } else if (token === ')') {
@@ -113,7 +146,7 @@ const encontrarOperadorPrincipal = (tokens) => {
 
 // Función para renderizar el árbol de manera gráfica
 const renderizarArbol = (nodo, contenedor) => {
-    if (!nodo) return;//si  los datos estan vacios no va a mostrar nada por pantalla
+    if (!nodo) return;
 
     const nodoElemento = document.createElement('div');
     nodoElemento.className = 'node';
@@ -140,4 +173,11 @@ const renderizarArbol = (nodo, contenedor) => {
         contenedor.appendChild(contenedorRamas);
     }
 };
-//// no tener limite de expresiones
+// Función para limpiar el árbol y los recorridos
+const limpiarArbol = () => {
+    document.getElementById('treeContainer').innerHTML = ''; // Limpiar el contenedor del árbol
+    document.getElementById('preorden').textContent = '';    // Limpiar el preorden
+    document.getElementById('inorden').textContent = '';     // Limpiar el inorden
+    document.getElementById('postorden').textContent = '';   // Limpiar el postorden
+    document.getElementById('expression').value = '';        // Limpiar el campo de entrada de la expresión
+};
